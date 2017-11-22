@@ -29,6 +29,9 @@
 
 > make run-backend
 
+* Создаем пользователя для [django-admin](http://127.0.0.1:8000/admin/)
+
+> make admin
 
 ## Полезные материалы
 * [React tutorial](https://reactjs.org/tutorial/tutorial.html)

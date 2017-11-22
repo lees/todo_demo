@@ -14,6 +14,9 @@ static-serve:
 run-backend:
 	./venv/bin/python todo_demo/manage.py runserver
 
+admin:
+	./venv/bin/python todo_demo/manage.py createsuperuser
+
 clean:
 	rm -rf venv
 	rm -rf public/build/*
