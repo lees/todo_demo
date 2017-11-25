@@ -1,6 +1,11 @@
 # -*- encoding: utf-8 -*-
 
-from django.http import HttpResponse
+from rest_framework import viewsets
 
-def root(request):
-	return HttpResponse("Hello world")
+from todo_demo import models
+from todo_demo import serializers
+
+
+class TodoViewSet(viewsets.ModelViewSet):
+	queryset = models.Todo.objects.all()
+	serializer_class = serializers.TodoSerializer
