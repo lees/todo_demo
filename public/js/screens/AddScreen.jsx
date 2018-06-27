@@ -1,10 +1,11 @@
 import React from 'react'
 import { Redirect } from 'react-router'
-import ajax from 'superagent'
+import { connect } from 'react-redux'
+import {addTodo} from 'store/actions'
 
 import { PageHeader, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap'
 
-export default class AddScreen extends React.Component {
+class AddScreen extends React.Component {
 	constructor(props) {
     super(props)
     this.state = {
@@ -15,18 +16,11 @@ export default class AddScreen extends React.Component {
   }
 
   onSubmit() {
-  	ajax.post("http://127.0.0.1:8000/todos/")
-  		.send({
-  			name: this.state.name,
-  			note: this.state.note
-  		})
-  		.end((err, res) => {
-        if (err) {
-          console.log('error', err)
-          return
-        }
-        this.setState({redirect: true})
-  		})
+    this.props.onSubmit({
+        name: this.state.name,
+        note: this.state.note
+    },
+    () => this.setState({redirect: true}))
   }
 
   render() {
@@ -57,3 +51,10 @@ export default class AddScreen extends React.Component {
   	)
   }
 }
+
+export default connect(
+    null,
+    (dispatch) => ({
+        onSubmit: (item, onOk) => dispatch(addTodo(item, onOk)),
+    })
+)(AddScreen)

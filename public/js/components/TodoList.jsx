@@ -1,71 +1,48 @@
 import React from 'react'
-import ajax from 'superagent'
+import { connect } from 'react-redux'
 import Todo from 'components/Todo.jsx'
 import EditModal from 'components/EditModal.jsx'
+import {fetchTodos, deleteTodo, edit, hideEdit, submit} from 'store/actions'
 
-export default class TodoList extends React.Component {
-	constructor(props) {
-    super(props);
-    this.state = {
-      todos: [],
-      edit: null,
-    }
-
-    this.fetchData = this.fetchData.bind(this)
-    this.deleteItem = this.deleteItem.bind(this)
-    this.editItem = this.editItem.bind(this)
-    this.hideEdit = this.hideEdit.bind(this)
-  }
+class TodoList extends React.Component {
 
   componentWillMount() {
-		this.fetchData()
-  }
-
-  fetchData() {
-    ajax.get("http://127.0.0.1:8000/todos/")
-      .end((err, res) => {
-        if (err) {
-          console.log('error', err)
-          return
-        }
-        this.setState({todos: res.body})
-      })
-  }
-
-  deleteItem(id) {
-  	ajax.delete("http://127.0.0.1:8000/todos/" + id + "/")
-      .end((err, res) => {
-        if (err) {
-          console.log('error', err)
-          return
-        }
-        this.fetchData()
-      })
-  }
-
-  editItem(todo) {
-  	this.setState({edit: todo})
-  }
-
-  hideEdit() {
-  	this.setState({edit: null})
-  	this.fetchData()
+        this.props.fetchData()
   }
 
   render() {
-  	let todos = this.state.todos
+  	let todos = this.props.todos
   	if (!todos && todos.length == 0) {
 	    return <p>No data</p>
 	  }
 	  return (
 	  	<div>
 		  	{todos.map((todo, idx) => {
-			    return <Todo key={idx} todo={todo}
-			    					onDelete={this.deleteItem}
-			    					onEdit={this.editItem}/>
+			    return <Todo 
+                            key={idx} 
+                            todo={todo}
+	    					onDelete={this.props.deleteTodo}
+	    					onEdit={this.props.editItem}/>
 			  })}
-		  	<EditModal todo={this.state.edit} onHide={this.hideEdit}/>
+		  	<EditModal todo={this.props.edit}
+                onSubmit={this.props.submit}
+                onHide={this.props.hideEdit}/>
 		 </div>
 		)
   }
 }
+
+
+export default connect(
+    (state) => ({
+        todos: state.todos,
+        edit: state.edit,
+    }),
+    (dispatch) => ({
+        fetchData: () => dispatch(fetchTodos()),
+        deleteTodo: (id) => dispatch(deleteTodo(id)),
+        editItem: (item) => dispatch(edit(item)),
+        hideEdit: () => dispatch(hideEdit()),
+        submit: (item) => dispatch(submit(item)),
+    })
+)(TodoList)

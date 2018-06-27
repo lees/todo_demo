@@ -26,18 +26,7 @@ export default class EditModal extends React.Component {
   }
 
   onSubmit() {
-    ajax.put("http://127.0.0.1:8000/todos/"+this.state.id+"/")
-      .send({
-        name: this.state.name,
-        note: this.state.note
-      })
-      .end((err, res) => {
-        if (err) {
-          console.log('error', err)
-          return
-        }
-        this.props.onHide()
-      })
+    this.props.onSubmit(this.state)
   }
 
   render() {
