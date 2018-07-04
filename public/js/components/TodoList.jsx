@@ -6,28 +6,31 @@ import TodoStore from 'store/TodoStore.js'
 
 export default class TodoList extends React.Component {
 
-  componentWillMount() {
-      fetchTodos()
-  }
+    componentWillMount() {
+        TodoStore.addListener('CHANGE', () => this.forceUpdate())
+        fetchTodos()
+    }
 
-  render() {
-  	let todos = this.props.todos
-  	if (!todos && todos.length == 0) {
-	    return <p>No data</p>
-	  }
-	  return (
-	  	<div>
-		  	{todos.map((todo, idx) => {
-			    return <Todo 
-                            key={idx} 
-                            todo={todo}
-	    					onDelete={deleteTodo}
-	    					onEdit={editItem}/>
-			  })}
-		  	<EditModal todo={edit}
+
+
+    render() {
+    let todos = TodoStore.get()
+    if (!todos || todos.length == 0) {
+        return <p>No data</p>
+    }
+    return (
+        <div>
+            {todos.map((todo, idx) => {
+                return <Todo 
+                    key={idx} 
+                    todo={todo}
+                    onDelete={deleteTodo}
+                    onEdit={edit}/>
+                })}
+            <EditModal todo={edit}
                 onSubmit={submit}
                 onHide={hideEdit}/>
-		 </div>
-		)
-  }
+        </div>
+    )
+}
 }
