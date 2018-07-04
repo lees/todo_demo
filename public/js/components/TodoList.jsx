@@ -1,13 +1,13 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import Todo from 'components/Todo.jsx'
 import EditModal from 'components/EditModal.jsx'
 import {fetchTodos, deleteTodo, edit, hideEdit, submit} from 'store/actions'
+import TodoStore from 'store/TodoStore.js'
 
-class TodoList extends React.Component {
+export default class TodoList extends React.Component {
 
   componentWillMount() {
-        this.props.fetchData()
+      fetchTodos()
   }
 
   render() {
@@ -21,28 +21,13 @@ class TodoList extends React.Component {
 			    return <Todo 
                             key={idx} 
                             todo={todo}
-	    					onDelete={this.props.deleteTodo}
-	    					onEdit={this.props.editItem}/>
+	    					onDelete={deleteTodo}
+	    					onEdit={editItem}/>
 			  })}
-		  	<EditModal todo={this.props.edit}
-                onSubmit={this.props.submit}
-                onHide={this.props.hideEdit}/>
+		  	<EditModal todo={edit}
+                onSubmit={submit}
+                onHide={hideEdit}/>
 		 </div>
 		)
   }
 }
-
-
-export default connect(
-    (state) => ({
-        todos: state.todos,
-        edit: state.edit,
-    }),
-    (dispatch) => ({
-        fetchData: () => dispatch(fetchTodos()),
-        deleteTodo: (id) => dispatch(deleteTodo(id)),
-        editItem: (item) => dispatch(edit(item)),
-        hideEdit: () => dispatch(hideEdit()),
-        submit: (item) => dispatch(submit(item)),
-    })
-)(TodoList)

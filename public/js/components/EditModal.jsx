@@ -1,5 +1,4 @@
 import React from 'react'
-import ajax from 'superagent'
 import { Modal, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap'
 
 export default class EditModal extends React.Component {

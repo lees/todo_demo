@@ -1,11 +1,10 @@
 import React from 'react'
 import { Redirect } from 'react-router'
-import { connect } from 'react-redux'
 import {addTodo} from 'store/actions'
 
 import { PageHeader, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap'
 
-class AddScreen extends React.Component {
+export default class AddScreen extends React.Component {
 	constructor(props) {
     super(props)
     this.state = {
@@ -51,10 +50,3 @@ class AddScreen extends React.Component {
   	)
   }
 }
-
-export default connect(
-    null,
-    (dispatch) => ({
-        onSubmit: (item, onOk) => dispatch(addTodo(item, onOk)),
-    })
-)(AddScreen)
